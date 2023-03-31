@@ -8,6 +8,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 import pytest
 from pathlib import Path
 from datetime import date
+import openpyxl
 
 class Test_Demo:
     def setup_method(self):
@@ -23,7 +24,22 @@ class Test_Demo:
     def visibility_element_located(self, located):
         WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located((located)))
 
-    @pytest.mark.parametrize("username, pasword", [("1", "1"), ("root", "root"), ("test", "test")])
+    def get_data():
+        excel_file = openpyxl.load_workbook("./data/invalid_login.xlsx")
+        selected_sheet = excel_file["Sheet1"]
+
+        total_row = selected_sheet.max_row
+        data = []
+        
+        for item in range(2, total_row+1):
+            user_name = selected_sheet.cell(item, 1).value
+            password = selected_sheet.cell(item, 2).value
+            tuple_data = (user_name, password)
+            data.append(tuple_data)
+
+        return data
+
+    @pytest.mark.parametrize("username, pasword", get_data())
     def test_invalid_login(self, username, pasword):
         self.visibility_element_located((By.ID, "user-name"))
         user_name = self.driver.find_element(By.ID, "user-name")
