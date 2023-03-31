@@ -14,15 +14,12 @@ from constants import global_constants
 from selenium.webdriver.common import utils 
 from webdriver_manager.chrome import ChromeDriverManager
 from pathlib import Path
-from datetime import date
 
 class Test_BuyProduct():
   def setup_method(self):
     self.driver = webdriver.Chrome(ChromeDriverManager().install())
     self.driver.get(global_constants.URL)
     self.driver.maximize_window()
-    self.folder_path_of_name = str(date.today()) 
-    Path(self.folder_path_of_name).mkdir(exist_ok=True)
 
   def teardown_method(self):
     self.driver.quit()
@@ -56,7 +53,7 @@ class Test_BuyProduct():
     self.driver.find_element(By.ID, 'continue').click()
     error_message = self.driver.find_element(By.XPATH, '//*[@id="checkout_info_container"]/div/form/div[1]/div[4]/h3')
 
-    self.driver.save_screenshot(self.folder_path_of_name+f'empty-first-name')
+    self.driver.save_screenshot('empty-first-name.png')
     assert error_message.text == 'Error: First Name is required'
 
   def test_buy_product_empty_lastname(self):
@@ -86,7 +83,7 @@ class Test_BuyProduct():
     self.driver.find_element(By.ID, 'continue').click()
     error_message = self.driver.find_element(By.XPATH, '//*[@id="checkout_info_container"]/div/form/div[1]/div[4]/h3')
 
-    self.driver.save_screenshot(self.folder_path_of_name+'empty-password')
+    self.driver.save_screenshot('empty-password.png')
     assert error_message.text == 'Error: Last Name is required'
   
   
