@@ -9,12 +9,13 @@ import pytest
 from pathlib import Path
 from datetime import date
 import openpyxl
+from constants import global_constants
 
 class Test_Demo:
     def setup_method(self):
         self.driver = webdriver.Chrome(ChromeDriverManager().install())
         self.driver.maximize_window()
-        self.driver.get("https://www.saucedemo.com/")
+        self.driver.get(global_constants.URL)
         self.forlder_path_of_name = str(date.today()) 
         Path(self.forlder_path_of_name).mkdir(exist_ok=True)
 
@@ -30,7 +31,7 @@ class Test_Demo:
 
         total_row = selected_sheet.max_row
         data = []
-        
+
         for item in range(2, total_row+1):
             user_name = selected_sheet.cell(item, 1).value
             password = selected_sheet.cell(item, 2).value
